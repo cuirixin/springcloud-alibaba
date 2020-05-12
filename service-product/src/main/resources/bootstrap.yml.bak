@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: service-product
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.33.10:8848
+        file-extension: yaml
+  profiles:
+    active: dev

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phoenix.mapper.TxLogMapper">
+
+    <insert id="createLog" useGeneratedKeys="true" parameterType="TxLog" keyProperty="id" keyColumn="id">
+        INSERT INTO t_txlog
+        (tx_id,`date`)
+        VALUES(#{txId},#{date})
+    </insert>
+
+    <select id="getByTxId" resultType="com.phoenix.model.TxLog" parameterType="string">
+        SELECT * FROM t_txlog where tx_id=#{txId};
+    </select>
+
+</mapper>

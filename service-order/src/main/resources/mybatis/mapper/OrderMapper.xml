@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phoenix.mapper.OrderMapper">
+
+    <!-- 创建订单, 执行完毕后通过order.getId()可获取到刚插入的订单ID -->
+    <insert id="createOrder" useGeneratedKeys="true" parameterType="Order" keyProperty="id" keyColumn="id">
+        INSERT INTO t_order
+        (uid,username,pid,ptitle,pprice,num)
+        VALUES(#{uid},#{username},#{pid},#{ptitle},#{pprice},#{num})
+    </insert>
+
+</mapper>

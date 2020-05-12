@@ -1,0 +1,65 @@
+server:
+  port: 9999
+#setting
+spring:
+  application:
+    name: api-gateway
+  #gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.33.10:8848
+    gateway:
+      #注册中心服务发现
+      discovery:
+        locator:
+          # 让gateway可以发现nacos中的服务
+          enabled: true
+      routes:
+        # 订单服务
+        - id: service_order_route
+          uri: lb://service-order
+          order: 1 # 路由优先级，越小级别越高
+          predicates:
+            - Path= /order_serv/**
+          filters:
+            - StripPrefix=1 # 在请求转发前去掉一层路径，跟Gateway与Eureka集成的配置方式不同
+        # 产品服务
+        - id: service_product_route
+          uri: lb://service-product
+          order: 0
+          predicates:
+            - Path= /product_serv/**
+            - IdRange= 12,18 # 自定义断言, **?id=13
+          filters:
+            - StripPrefix=1
+            - Log=True,True # 自定义过滤器
+
+gateway-auth:
+  api-servers:
+    - service-order
+    - service-product
+  api-urls:
+    - /order/*
+    - /product/*
+  login-ignore-urls:
+    - /user/login
+
+#log
+logging:
+  level:
+    com.phoenix: DEBUG
+    org.springframework.cloud.gateway: INFO
+    org.springframework.http.server.reactive: INFO
+    org.springframework.web.reactive: INFO
+    reactor.ipc.netty: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: ALWAYS
